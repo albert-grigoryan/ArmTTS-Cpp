@@ -26,7 +26,7 @@ public:
     std::vector<std::vector<long>> preprocessText(const std::wstring& text) noexcept;
 
 private:
-    std::vector<std::wstring> tokenize(const std::wstring& text) noexcept;
+    std::vector<std::wstring> tokenize(std::wstring text) noexcept;
 
     std::vector<long> preprocessChunk(const std::string& chunk) noexcept;
 

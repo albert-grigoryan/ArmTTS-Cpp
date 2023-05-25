@@ -11,44 +11,30 @@
 namespace VARAGAVAN {
 namespace ARMTTS {
 
-std::vector<std::wstring> TextPreprocessor::tokenize(const std::wstring& text)  noexcept {
-    std::vector<std::wstring> tokens;
+std::vector<std::wstring> TextPreprocessor::tokenize(std::wstring text) noexcept {
     std::wregex s_full_stops(L"[;։․.]");
     std::wregex s_commas(L"[՝`]");
-    std::wstring processedStr = std::regex_replace(text, s_full_stops, L":", std::regex_constants::match_any);
-    processedStr = std::regex_replace(processedStr, s_commas, L",", std::regex_constants::match_any);
-    std::wistringstream tokenizer(processedStr);
-    std::wstring token;
-    while (std::getline(tokenizer, token, L':')) {
-        if (token.length() <= MAX_LENGTH) {
-            tokens.push_back(token + L':');
-            continue;
-        }
-        std::wistringstream word_tokenizer(token);
-        std::wstring word;
-        std::wstring tmp_string;
-        while (word_tokenizer >> word) {
-            if (tmp_string.length() + word.length() < MAX_LENGTH) {
-                tmp_string += L" " + word;
-                if (word.back() == L':') {
-                    tokens.push_back(tmp_string);
-                    tmp_string.clear();
-                } else if (word.length() > MAX_LENGTH / 2 && word.back() == L',') {
-                    tokens.push_back(tmp_string);
-                    tmp_string.clear();
-                }
-            } else {
-                if (!tmp_string.empty()) {
-                    tokens.push_back(tmp_string + L',');
-                }
-                tmp_string = word;
-            }
-        }
-        if (!tmp_string.empty()) {
-            tokens.push_back(tmp_string + L':');
+    text = std::regex_replace(text, s_full_stops, L":", std::regex_constants::match_any);
+    text = std::regex_replace(text, s_commas, L",", std::regex_constants::match_any);
+    std::vector<std::wstring> tokens;
+    while (text.length() > 0) {
+        if (text.length() <= MAX_LENGTH) {
+            tokens.push_back(text);
+            break;
+        } else if (text.substr(0, MAX_LENGTH).find(L':') != std::string::npos) {
+            int idx = text.substr(0, MAX_LENGTH).rfind(L':');
+            tokens.push_back(text.substr(0, idx+1));
+            text = text.substr(idx+1);
+        } else if (text.substr(0, MAX_LENGTH).find(L',') != std::string::npos) {
+            int idx = text.substr(0, MAX_LENGTH).rfind(L',');
+            tokens.push_back(text.substr(0, idx+1));
+            text = text.substr(idx+1);
+        } else {
+            int idx = text.substr(0, MAX_LENGTH).rfind(L' ');
+            tokens.push_back(text.substr(0, idx+1) + L',');
+            text = text.substr(idx+1);
         }
     }
-
     return tokens;
 }
 
