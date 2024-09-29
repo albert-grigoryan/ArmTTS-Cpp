@@ -32,7 +32,7 @@ private:
 
     const std::string X_RapidAPI_Key;
     static constexpr int MAX_LENGTH = 140;
-    static constexpr char API_URL[] = "https://armtts1.p.rapidapi.com/v2/preprocess";
+    static constexpr char API_URL[] = "https://armtts1.p.rapidapi.com/v3/preprocess";
 
 };
 

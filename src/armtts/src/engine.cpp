@@ -79,7 +79,7 @@ std::vector<float> Engine::process(std::vector<std::vector<long>>& inputArray, f
     for (size_t i = 0; i < inputArray.size(); ++i) {
         inputLengthsArray[i] = inputArray[i].size();
     }
-    std::vector<float> scalesArray{0.0f, speed, 0.0f};
+    std::vector<float> scalesArray{0.333f, speed, 0.333f};
 
     const std::vector<float> result = RunONNXModel(inputArray, inputLengthsArray, scalesArray);
     return result;
